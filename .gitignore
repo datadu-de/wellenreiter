@@ -141,3 +141,6 @@ venv/
 .vscode/
 test.py
 data-12m-rl.txt
+
+
+.streamlit/
