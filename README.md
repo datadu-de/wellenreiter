@@ -1,4 +1,4 @@
-# wellenreiter
+# wellenreiter :surfer:
 
 This is a simulation showcase running in [streamlit](https://streamlit.io).
 
