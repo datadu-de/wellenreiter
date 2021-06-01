@@ -12,6 +12,7 @@ def create_df_from_csv(
 
     df = pd.read_csv(
         filename,
+        sep=",",
         parse_dates=["date"],
         infer_datetime_format=True,
         dtype={
