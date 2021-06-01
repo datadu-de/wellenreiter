@@ -186,8 +186,7 @@ def init_layout():
         """
         # wellenreiter
         
-        with :brain: by [Frank](https://github.com/users/datadu-de)
-
+        with :brain: by [Frank](https://github.com/users/datadu-de), 
         code at [github](https://github.com/datadu-de/wellenreiter)
         """
     )
