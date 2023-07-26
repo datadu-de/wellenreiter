@@ -6,4 +6,4 @@ Input parameters are production amounts and sales forecasts. The result is a vis
 
 It is intended for collaborative and interactive decision making in a visual way during a all-hands situation.
 
-The demo is running at <https://shiny-simulation-system.herokuapp.com>.
+The demo is running at <https://shiny-simulation-system.streamlit.app>.
