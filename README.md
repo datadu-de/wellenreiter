@@ -1,6 +1,6 @@
 # wellenreiter :surfer:
 
-This is a simulation showcase running in [streamlit](https://streamlit.io).
+Simulation showcase using [streamlit](https://streamlit.io).
 
 Input parameters are production amounts and sales forecasts. The result is a visual representation of the resulting stock level over the specified time frame.
 
