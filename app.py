@@ -6,23 +6,20 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
-def create_df_from_csv(
-    filename="data-12m.csv", whereto_production=None, whereto_sales=None
-):
-
+def create_df_from_csv(filename="data-12m.csv", whereto_production=None, whereto_sales=None):
     df = pd.read_csv(
         filename,
         sep=",",
         parse_dates=["date"],
-        infer_datetime_format=True,
+        date_format="%Y-%m-%d",
         dtype={
             "measure": np.str_,
             "value": np.int_,
         },
     )
 
-    initial_production = df[df["measure"] == "production"].sum()["value"]
-    initial_sales = df[df["measure"] == "sales"].sum()["value"]
+    initial_production = df[df["measure"] == "production"]["value"].sum()
+    initial_sales = df[df["measure"] == "sales"]["value"].sum()
 
     df = df.pivot_table(columns="measure", values="value", index="date")
 
@@ -74,7 +71,6 @@ def create_df_from_csv(
 
 
 def write_matrix(initial_production, initial_sales, df, whereto_matrix=None):
-
     if whereto_matrix is None:
         whereto_matrix = st.sidebar
 
@@ -180,7 +176,7 @@ def init_params(whereto_params=None):
 
 def init_layout():
     err = st.empty()
-    c1, c2, c3, c4 = st.beta_columns((3, 1, 1, 1))
+    c1, c2, c3, c4 = st.columns((3, 1, 1, 1))
 
     c1.write(
         """
@@ -195,7 +191,6 @@ def init_layout():
 
 
 def main(*args, **kwargs):
-
     st.set_page_config(page_title="wellenreiter | by Frank", layout="wide")
 
     c1, c2, c3, c4, err = init_layout()
@@ -222,9 +217,7 @@ def main(*args, **kwargs):
                 initial_sales,
                 production,
                 sales,
-            ) = create_df_from_csv(
-                uploaded_file, whereto_production=c2, whereto_sales=c3
-            )
+            ) = create_df_from_csv(uploaded_file, whereto_production=c2, whereto_sales=c3)
 
         except ValueError:
             err.error(
@@ -270,9 +263,7 @@ def main(*args, **kwargs):
 
     plt.style.use("seaborn")
 
-    fig1, (ax1, ax2) = plt.subplots(
-        nrows=2, sharex=True, gridspec_kw={"height_ratios": [1, 3]}
-    )
+    fig1, (ax1, ax2) = plt.subplots(nrows=2, sharex=True, gridspec_kw={"height_ratios": [1, 3]})
 
     ax1.set_frame_on(False)
     ax1.set_axis_off()
@@ -312,21 +303,15 @@ def main(*args, **kwargs):
     ax2.plot(df["mmm"], df["stock_rt"], label="stock")
     ax2.plot(df["mmm"].iat[-1], target_value, "bo", label="YE target")
 
-    ax2.yaxis.set_major_formatter(
-        mpl.ticker.FuncFormatter(lambda x, pos: (f"{x:,.0f}"))
-    )
+    ax2.yaxis.set_major_formatter(mpl.ticker.FuncFormatter(lambda x, pos: (f"{x:,.0f}")))
 
     ax2.legend()
 
-    ax1.yaxis.set_major_formatter(
-        mpl.ticker.FuncFormatter(lambda x, pos: (f"{x:,.0f}"))
-    )
+    ax1.yaxis.set_major_formatter(mpl.ticker.FuncFormatter(lambda x, pos: (f"{x:,.0f}")))
 
     df["stock_decrease"] = df.apply(lambda x: x["production"] > x["sales"], axis=1)
     df["stock_increase"] = df.apply(lambda x: x["production"] < x["sales"], axis=1)
-    df["stock_color"] = df.apply(
-        lambda x: x["production"] > x["sales"] and "red" or "green", axis=1
-    )
+    df["stock_color"] = df.apply(lambda x: x["production"] > x["sales"] and "red" or "green", axis=1)
 
     ax1.bar(
         df["mmm"],
@@ -364,7 +349,7 @@ def main(*args, **kwargs):
 
     write_matrix(initial_production, initial_sales, df, whereto_matrix=c1)
 
-    with c1.beta_expander("input data", expanded=False):
+    with c1.expander("input data", expanded=False):
         st.dataframe(df.set_index("date"))
 
 
